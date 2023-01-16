@@ -1,7 +1,7 @@
 import React from "react";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { addDays } from 'date-fns';
+import { addDays, differenceInCalendarDays } from 'date-fns';
 import { DateRangePicker } from 'react-date-range';
 
 function CustomDateRange(props) {
@@ -9,7 +9,8 @@ function CustomDateRange(props) {
         {
           startDate: addDays(new Date(), -7),
           endDate: new Date(),
-          key: 'selection'
+          key: 'selection',
+          showDateDisplay: false
         }
     ]);
 
@@ -18,36 +19,38 @@ function CustomDateRange(props) {
 
     const formatDate = (date) => date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 
-    function changeRange(trigger){
-        const noDays = dateRange[0].endDate.getDate() - dateRange[0].startDate.getDate() + 1
+    function changeRange(state){
+        const noDays = differenceInCalendarDays(dateRange[0].endDate, dateRange[0].startDate) + 1
 
         setDateRange((prev) => {
             return prev.map((item) => {
                 return (
-                    trigger === 1 ? 
+                    state === 1 ? 
                     {...item, startDate: addDays(item.endDate, 1), endDate: addDays(item.endDate, noDays)} : 
-                    {...item, startDate: addDays(item.startDate, noDays * -1), endDate: addDays(item.startDate, -1)})
+                    {...item, startDate: addDays(item.startDate, noDays * -1), endDate: addDays(item.startDate, -1)}
+                )
             })
         })
-    }
+    }   
 
     return (
         <div className="custom-date-range flex flex-col md:items-end">
-            <div className="w-full md:w-1/2 grid grid-cols-12 gap-3 my-1">
-                <span onClick={() => changeRange(-1)} className="cursor-pointer col-span-2 lg:col-span-1 pb-1 flex justify-center items-center rounded-md shadow-sm bg-white text-2xl">
+            <div className="grid grid-cols-12 w-full md:w-1/2 my-1 md:pl-2 gap-2">
+                <span onClick={() => changeRange(-1)} className=" col-span-2 lg:col-span-1 flex justify-center items-center pb-1 bg-white text-2xl cursor-pointer rounded-md shadow-sm">
                     &#60;
                 </span>
-                <p onClick={toggleDateRangePicker} className="cursor-pointer col-span-8 lg:col-span-10 flex justify-center items-center rounded-md shadow-sm bg-white font-semibold">
+                <p onClick={toggleDateRangePicker} className=" col-span-8 lg:col-span-10 flex justify-center items-center bg-white font-semibold text-slate-700 cursor-pointer rounded-md shadow-sm">
                     {formatDate(dateRange[0].startDate)} - {formatDate(dateRange[0].endDate)}
                 </p>
-                <span onClick={() => changeRange(1)} className="cursor-pointer col-span-2 lg:col-span-1 pb-1 flex justify-center items-center rounded-md shadow-sm bg-white text-2xl">
+                <span onClick={() => changeRange(1)} className=" col-span-2 lg:col-span-1 flex justify-center items-center pb-1 bg-white text-2xl cursor-pointer rounded-md shadow-sm">
                     &#62;
                 </span>          
             </div>
 
-            <div  onMouseLeave={() => setShowDateRange(false)} className={`${showDateRange ? `block` : `hidden`} lg:w-1/2`}>
+            <div    onMouseLeave={() => setShowDateRange(false)} 
+                    className={` relative lg:w-1/2 ${showDateRange ? `block` : `hidden`}`}>
                 <DateRangePicker
-                    className=" w-full flex justify-center items-center"
+                    className=" absolute flex justify-center items-center w-full bg-slate-100 shadow-lg"
                     onChange={item => setDateRange([item.selection])}
                     showSelectionPreview={true}
                     moveRangeOnFirstSelection={false}
