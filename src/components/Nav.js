@@ -1,15 +1,17 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+import { nanoid } from "nanoid";
 import Logo from "../images/logo.png"
 import userIcon from "../images/user-icon.png"
 
-function Nav(props) {
+function TestNav() {
     const [menu, setMenu] = React.useState(false)
 
     const options = ['dashboard', 'budgets']
     const sidemenu = ['settings', 'support', 'log out']
 
     return (
-        <div className=" nav grid grid-cols-12 px-1 bg-white shadow-md sticky top-0">
+        <nav className=" nav grid grid-cols-12 px-1 bg-white shadow-md sticky top-0">
             <div className=" col-span-2 flex justify-center items-center">
                 <img 
                     className="md:w-5/6 cursor-pointer" 
@@ -22,11 +24,12 @@ function Nav(props) {
                     {
                         options.map((item) => {
                             return(
-                                <li onClick={() => props.handleClick(item)}
-                                    className={`py-4 border-b-4 text-lg hover:text-green-500 font-semibold cursor-pointer
-                                                ${props.selected === item ? `text-green-500 border-green-500` : `text-slate-500 border-white`}`}>
-                                    {item[0].toUpperCase() + item.substring(1)}
-                                </li>
+                                <NavLink    key = {nanoid()} to = {item === 'dashboard' ? `/` : `${item}`}
+                                            className={(state) => state.isActive ? `border-b-4 text-green-500 border-green-500` : `text-slate-500`}>
+                                    <li className={`py-4 text-lg hover:text-green-500 font-semibold cursor-pointer`}>
+                                        {item[0].toUpperCase() + item.substring(1)}
+                                    </li>
+                                </NavLink>
                             )
                         })
                     }
@@ -55,7 +58,7 @@ function Nav(props) {
                         {
                             sidemenu.map((item) => {
                                 return(
-                                    <li className="hover:text-green-500">
+                                    <li key={nanoid()} className="hover:text-green-500">
                                         {item[0].toUpperCase() + item.substring(1)}
                                     </li>
                                 )
@@ -64,8 +67,8 @@ function Nav(props) {
                     </ul>
                 </div>
             </div>
-        </div>
+        </nav>
     );
 }
 
-export default Nav;
+export default TestNav;

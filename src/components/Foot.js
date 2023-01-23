@@ -1,8 +1,10 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+import { nanoid } from "nanoid";
 import dashboardIcon from "../images/dashboard-icon.png";
 import budgetsIcon from "../images/budget-icon.png"
 
-function Foot(props) {
+function Foot() {
     const options = [
         {title: 'dashboard', image: dashboardIcon},
         {title: 'budgets', image: budgetsIcon}
@@ -16,18 +18,19 @@ function Foot(props) {
                 {
                     options.map((item) => {
                         return (
-                            <li onClick={() => props.handleClick(item.title)} 
-                                className={`basis-1/2 flex flex-col justify-center items-center py-1
-                                            text-lg font-semibold hover:text-green-500 border-b-4 cursor-pointer
-                                            ${props.selected === item.title ? `text-green-500 border-green-500` : `text-slate-500 border-white`}`}>
-                                <img 
-                                    className=" w-1/12" 
-                                    src={item.image} alt={`${item.title}-icon"`} 
-                                />
-                                <span className=" text-sm">
-                                    {item.title[0].toUpperCase() + item.title.substring(1)}
-                                </span>
-                            </li>
+                            <NavLink    key = {nanoid()} to = {item.title === 'dashboard' ? `/` : `${item.title}`}
+                                        className={(state) => state.isActive ? `border-b-4 text-green-500 border-green-500` : `text-slate-500`}>
+                                <li className={`basis-1/2 flex flex-col justify-center items-center py-1
+                                                text-lg font-semibold hover:text-green-500 cursor-pointer`}>
+                                    <img 
+                                        className=" w-1/12" 
+                                        src={item.image} alt={`${item.title}-icon"`} 
+                                    />
+                                    <span className=" text-sm">
+                                        {item.title[0].toUpperCase() + item.title.substring(1)}
+                                    </span>
+                                </li>
+                            </NavLink>
                         )
                     })
                 }

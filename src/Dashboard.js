@@ -31,11 +31,11 @@ function Dashboard() {
       {title: 'Total Balance', amount: '952'},
       {title: 'Total Period Change', amount: '20'},
       {title: 'Total Period Expenses', amount: '10'},
-      {title: 'Total Period Income', amount: '0'}
+      {title: 'Total Period Income', amount: '100'}
     ]
 
     return (
-        <div className=" dashboard flex flex-col px-6 sm:px-10 lg:px-16 space-y-1 py-2">
+        <div className=" dashboard flex flex-col min-h-screen px-6 sm:px-10 lg:px-16 py-2 pb-4 space-y-1">
             <h2 className=" py-4 text-2xl font-bold text-slate-700">Wallets</h2>
         
             <div className=" grid md:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -59,7 +59,7 @@ function Dashboard() {
                 {
                     overview.map((item) => {
                         return (
-                            <div className=" min-w-[320px] md:min-w-[200px] basis-1/4 flex flex-col px-4 py-2 bg-white rounded-lg shadow-sm">
+                            <div key={nanoid()} className=" min-w-[320px] md:min-w-[210px] basis-1/4 flex flex-col px-4 py-2 my-3 md:my-0 bg-white rounded-xl shadow-sm">
                                 <p className=" text-base font-semibold text-slate-700">{item.title}</p>
                                 <p className=" text-2xl font-normal text-green-500">{item.amount} USD</p>
                             </div>

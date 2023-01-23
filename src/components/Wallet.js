@@ -8,7 +8,7 @@ function Wallet(props) {
         <div className=" flex items-center justify-center w-8 m-3 ">
             <img 
                 className="w-6" 
-                src={walletIcon}alt="wallet-icon"
+                src={walletIcon} alt="wallet-icon"
             />
         </div>
 

@@ -1,27 +1,20 @@
 import React from "react";
 import Nav from "./components/Nav";
 import Dashboard from "./Dashboard";
-import Foot from "./components/Foot";
+import Budgets from "./Budgets";
+import Foot from "./components/Foot"
+import { Route, Routes } from "react-router-dom";
 
 function App() {
-    const [selected, setSelected] = React.useState('dashboard')
-
-    function handleClick(option){
-        setSelected(option)
-    }
-
     return (
-        <div className={"app h-fit bg-slate-100"}>
-            <Nav 
-                selected = {selected}
-                handleClick = {(option) => handleClick(option)}
-            />
-            <Dashboard />
-            <Foot 
-                selected = {selected}
-                handleClick = {(option) => handleClick(option)}            
-            />
-        </div>
+        <div className="app min-h-screen bg-slate-100">
+            <Nav />      
+            <Routes>
+                <Route path='/' element={<Dashboard />} />
+                <Route path='budgets' element={<Budgets />} />
+            </Routes>
+            <Foot />
+        </div>        
     );
 }
 
