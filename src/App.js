@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "./components/Nav";
 import Dashboard from "./Dashboard";
-import Budgets from "./Budgets";
+import BudgetsPage from "./BudgetsPage";
 import Foot from "./components/Foot"
 import { Route, Routes } from "react-router-dom";
 
@@ -11,7 +11,7 @@ function App() {
             <Nav />      
             <Routes>
                 <Route path='/' element={<Dashboard />} />
-                <Route path='budgets' element={<Budgets />} />
+                <Route path='budgets' element={<BudgetsPage />} />
             </Routes>
             <Foot />
         </div>        

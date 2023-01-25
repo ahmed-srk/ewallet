@@ -25,7 +25,7 @@ function Budgets() {
                     )
                 }
 
-                <div className=" flex flex-col justify-center items-center bg-white space-y-3 rounded-md min-h-[210px] p-2">
+                <div className=" flex flex-col justify-center items-center bg-white space-y-3 rounded-md min-h-[210px] px-2 lg:px-5">
                     <p className=" text-center text-md text-slate-500">Take Control of your money and Save more money with Budgets!</p>
                     <button onClick={() => setShowModal(true)} 
                         className=" p-2 bg-green-500 font-semibold text-white rounded shadow-sm hover:shadow-md ">
