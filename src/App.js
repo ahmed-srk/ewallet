@@ -1,9 +1,9 @@
 import React from "react";
-import Nav from "./components/Nav";
-import Dashboard from "./Dashboard";
-import BudgetsPage from "./BudgetsPage";
-import Foot from "./components/Foot"
 import { Route, Routes } from "react-router-dom";
+import Nav from "./generalComponents/navigation/Nav"
+import Dashboard from "./dashboard/Dashboard";
+import BudgetsPage from "./budgetPage/BudgetsPage";
+import Foot from "./generalComponents/navigation/Foot";
 
 function App() {
     return (

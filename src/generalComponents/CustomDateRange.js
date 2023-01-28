@@ -5,23 +5,24 @@ import { addDays, differenceInCalendarDays } from 'date-fns';
 import { DateRangePicker } from 'react-date-range';
 
 function CustomDateRange(props) {
-    const [dateRange, setDateRange] = React.useState([
-        {
-          startDate: addDays(new Date(), -7),
-          endDate: new Date(),
-          key: 'selection',
-          showDateDisplay: false
-        }
-    ]);
+    const [dateRange, setDateRange] = React.useState(
+        () => setDateFormat('dateRange') ||
+        [{ key: 'selection', startDate: addDays(new Date(), -7), endDate: new Date() }]
+    );
+
+    function setDateFormat(localStorageKey){
+        const range = JSON.parse(localStorage.getItem(localStorageKey))
+        return range.map((item) => {
+            return {...item, startDate: new Date(item.startDate), endDate: new Date(item.endDate)}
+        })
+    }
 
     const [showDateRange, setShowDateRange] = React.useState(false)
     const toggleDateRangePicker = () => setShowDateRange((prev) => !prev)
-
     const formatDate = (date) => date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 
     function changeRange(state){
         const noDays = differenceInCalendarDays(dateRange[0].endDate, dateRange[0].startDate) + 1
-
         setDateRange((prev) => {
             return prev.map((item) => {
                 return (
@@ -31,7 +32,11 @@ function CustomDateRange(props) {
                 )
             })
         })
-    }   
+    }
+
+    React.useEffect(() => {
+        localStorage.setItem('dateRange', JSON.stringify([{key: 'selection', startDate: dateRange[0].startDate, endDate: dateRange[0].endDate}]))
+    }, [dateRange]);
 
     return (
         <div className="custom-date-range flex flex-col md:items-end">
@@ -47,10 +52,9 @@ function CustomDateRange(props) {
                 </span>          
             </div>
 
-            <div    onMouseLeave={() => setShowDateRange(false)} 
-                    className={` relative lg:w-1/2 ${showDateRange ? `block` : `hidden`}`}>
+            <div className={` relative lg:w-1/2 ${showDateRange ? `block` : `hidden`}`} onMouseLeave={() => setShowDateRange(false)}>
                 <DateRangePicker
-                    className=" absolute flex justify-center items-center w-full bg-slate-100 shadow-lg"
+                    className={`absolute flex justify-center items-center w-full bg-slate-100 shadow-lg`}
                     onChange={item => setDateRange([item.selection])}
                     showSelectionPreview={true}
                     moveRangeOnFirstSelection={false}
