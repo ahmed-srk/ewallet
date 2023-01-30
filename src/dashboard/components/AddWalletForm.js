@@ -2,8 +2,8 @@ import React from "react"
 
 export function AddWalletForm({wallet, setWallet, errorMsg}){
     function handleChange(event){
-        const {name, value, type} = event.target
-        setWallet((prev) => ({...prev, [name]: type === 'radio' ? Number(value) : value}))
+        const {name, value} = event.target
+        setWallet((prev) => ({...prev, [name]: value}))
     }
 
     return(

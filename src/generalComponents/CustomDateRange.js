@@ -39,8 +39,8 @@ function CustomDateRange(props) {
     }, [dateRange]);
 
     return (
-        <div className="custom-date-range flex flex-col md:items-end">
-            <div className="grid grid-cols-12 w-full md:w-1/2 my-1 md:pl-2 gap-2">
+        <div className="custom-date-range flex flex-col">
+            <div className="grid grid-cols-12 w-full gap-2">
                 <span onClick={() => changeRange(-1)} className=" col-span-2 lg:col-span-1 flex justify-center items-center pb-1 bg-white text-2xl cursor-pointer rounded-md shadow-sm">
                     &#60;
                 </span>
@@ -52,7 +52,7 @@ function CustomDateRange(props) {
                 </span>          
             </div>
 
-            <div className={` relative lg:w-1/2 ${showDateRange ? `block` : `hidden`}`} onMouseLeave={() => setShowDateRange(false)}>
+            <div className={` relative ${showDateRange ? `block` : `hidden`}`} onMouseLeave={() => setShowDateRange(false)}>
                 <DateRangePicker
                     className={`absolute flex justify-center items-center w-full bg-slate-100 shadow-lg`}
                     onChange={item => setDateRange([item.selection])}

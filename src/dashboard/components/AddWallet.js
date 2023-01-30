@@ -1,10 +1,12 @@
 import React from "react"
+import { nanoid } from "nanoid"
 import CustomModal from "../../generalComponents/CustomModal"
 import { checkErrorForm } from "../../generalComponents/checkErrorForm"
 import { AddWalletForm } from "./AddWalletForm"
 
 function AddWallet(props) {
     const [wallet, setWallet] = React.useState({
+        id: nanoid(),
         name: '',
         currency: '',
         amount: '',

@@ -11,7 +11,7 @@ function App() {
             <Nav />      
             <Routes>
                 <Route path='/' element={<Dashboard />} />
-                <Route path='budgets' element={<BudgetsPage />} />
+                <Route path='/budgets' element={<BudgetsPage />} />
             </Routes>
             <Foot />
         </div>        
