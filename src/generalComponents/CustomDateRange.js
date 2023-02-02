@@ -1,25 +1,24 @@
 import React from "react";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { addDays, differenceInCalendarDays } from 'date-fns';
+import { addDays, differenceInCalendarDays, format } from 'date-fns';
 import { DateRangePicker } from 'react-date-range';
 
-function CustomDateRange(props) {
+export function setDateFormat(localStorageKey){
+    const range = JSON.parse(localStorage.getItem(localStorageKey))
+    return range && range.map((item) => {
+        return {...item, startDate: new Date(item.startDate), endDate: new Date(item.endDate)}
+    })
+}
+
+export default function CustomDateRange(props) {
     const [dateRange, setDateRange] = React.useState(
         () => setDateFormat('dateRange') ||
         [{ key: 'selection', startDate: addDays(new Date(), -7), endDate: new Date() }]
     );
 
-    function setDateFormat(localStorageKey){
-        const range = JSON.parse(localStorage.getItem(localStorageKey))
-        return range.map((item) => {
-            return {...item, startDate: new Date(item.startDate), endDate: new Date(item.endDate)}
-        })
-    }
-
     const [showDateRange, setShowDateRange] = React.useState(false)
     const toggleDateRangePicker = () => setShowDateRange((prev) => !prev)
-    const formatDate = (date) => date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
 
     function changeRange(state){
         const noDays = differenceInCalendarDays(dateRange[0].endDate, dateRange[0].startDate) + 1
@@ -36,20 +35,18 @@ function CustomDateRange(props) {
 
     React.useEffect(() => {
         localStorage.setItem('dateRange', JSON.stringify([{key: 'selection', startDate: dateRange[0].startDate, endDate: dateRange[0].endDate}]))
+        props.changeDateRange(dateRange[0])
+        // eslint-disable-next-line
     }, [dateRange]);
 
     return (
         <div className="custom-date-range flex flex-col">
             <div className="grid grid-cols-12 w-full gap-2">
-                <span onClick={() => changeRange(-1)} className=" col-span-2 lg:col-span-1 flex justify-center items-center pb-1 bg-white text-2xl cursor-pointer rounded-md shadow-sm">
-                    &#60;
-                </span>
+                <span onClick={() => changeRange(-1)} className=" col-span-2 lg:col-span-1 flex justify-center items-center pb-1 bg-white text-2xl cursor-pointer rounded-md shadow-sm">&#60;</span>
                 <p onClick={toggleDateRangePicker} className=" col-span-8 lg:col-span-10 flex justify-center items-center bg-white font-semibold text-slate-700 cursor-pointer rounded-md shadow-sm">
-                    {formatDate(dateRange[0].startDate)} - {formatDate(dateRange[0].endDate)}
+                    {format(dateRange[0].startDate, 'dd/MM/yyyy')} - {format(dateRange[0].endDate, 'dd/MM/yyyy')}
                 </p>
-                <span onClick={() => changeRange(1)} className=" col-span-2 lg:col-span-1 flex justify-center items-center pb-1 bg-white text-2xl cursor-pointer rounded-md shadow-sm">
-                    &#62;
-                </span>          
+                <span onClick={() => changeRange(1)} className=" col-span-2 lg:col-span-1 flex justify-center items-center pb-1 bg-white text-2xl cursor-pointer rounded-md shadow-sm">&#62;</span>          
             </div>
 
             <div className={` relative ${showDateRange ? `block` : `hidden`}`} onMouseLeave={() => setShowDateRange(false)}>
@@ -66,5 +63,3 @@ function CustomDateRange(props) {
         </div>
     );
 }
-
-export default CustomDateRange;

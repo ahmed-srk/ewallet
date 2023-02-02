@@ -1,51 +1,48 @@
 import React from "react";
-import CustomDateRange from "../generalComponents/CustomDateRange";
-import StatsDetails from "../generalComponents/StatsDetails"
-import noData from "../images/no-data.svg"
+import { isWithinInterval } from "date-fns";
+import CustomDateRange, { setDateFormat } from "../generalComponents/CustomDateRange";
 import AddTransaction from "./components/AddTransaction";
+import Analysis from "./components/Analysis";
 
 function Overview(props){
-    // eslint-disable-next-line
-    const [transactions, setTransactions] = React.useState([])
+    const [transactions, setTransactions] = React.useState(() => props.getWalletTransactions(props.id))
+    const [dateRange, setDateRange] = React.useState(() => setDateFormat('dateRange')[0])
+    const [expense, setExpense] = React.useState(0)
     const [showModal, setShowModal] = React.useState(false)
-    const overview = [
-        {title: 'Total Balance', amount: props.amount},
-        {title: 'Total Period Change', amount: '0'},
-        {title: 'Total Period Expenses', amount: '0'},
-        {title: 'Total Period Income', amount: '0'}
-    ]
+
+    function createTransaction(transaction){
+        setTransactions((item) => [...item, transaction])
+        setExpense((prev) => prev + Number(transaction.amount))
+        props.updateWalletsTransactions(props.id, transaction)
+    }
+
+    function changeDateRange(startDate, endDate){
+        setDateRange((prev) => {
+            return {...prev, startDate: startDate, endDate: endDate}
+        })
+    }
 
     return(
         <div>
-            <h2 className=" py-4 text-2xl font-bold text-slate-700">Overview</h2>            
+            <h2 className=" py-4 text-2xl font-bold text-slate-700">
+                {props.name[0].toUpperCase() + props.name.substring(1).toLowerCase()} <span className=" font-light">Overview</span>
+            </h2>            
             <div className=" grid grid-cols-4 gap-3 py-1">
                 <button className=" col-span-4 sm:col-span-2 md:col-span-1 p-2 bg-green-500 text-white font-semibold rounded-md shadow-md hover:shadow-lg"
                         onClick={() => setShowModal(true)}>
                     Add Transaction
                 </button>
-                <div className=" col-span-4 md:col-start-3 md:col-span-2">
-                    <CustomDateRange />
-                </div>  
+                <div className=" col-span-4 md:col-start-3 md:col-span-2"><CustomDateRange changeDateRange={({startDate, endDate}) => changeDateRange(startDate, endDate)} /></div>  
             </div>
-            <div className=" flex flex-row my-1 space-x-4 overflow-x-auto">
-                { overview.map((item) => {return (<StatsDetails key = {item.title} {...item} currency={props.currency} />) }) }
-            </div>
-            <div className=" flex flex-col justify-center items-center h-[560px]">
-                <img className=" w-1/2 h-[240px]" src={noData} alt="no-data" />
-                <span className=" text-sm font-semibold">You have no Transaction yet!</span>
-            </div>
-
-            {
-                showModal &&
-                <AddTransaction
-                    setShowModal = {setShowModal}
-                    setTransactions = {(transaction) => {
-                        setTransactions((prev) => {
-                            return [...prev, transaction]
-                        })
-                    }}
-                />
-            }
+            <Analysis 
+                transactions={transactions.filter((item) => isWithinInterval(new Date(item.date), {start: dateRange.startDate, end: dateRange.endDate}))} 
+                currency={props.currency} 
+                amount={props.amount}
+                dateRange={dateRange}
+                expense={expense}
+            />
+            
+            { showModal && <AddTransaction currency={props.currency} setShowModal={setShowModal} createTransaction={(transaction) => createTransaction(transaction)} /> }
         </div>
     )
 }

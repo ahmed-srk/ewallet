@@ -3,7 +3,8 @@ import walletIcon from "../../images/wallet-icon.png"
 
 function WalletCard(props) {
     return (
-        <div className="wallet basis-1/2 flex flex-row p-2 bg-white rounded-md shadow-sm hover:shadow-md cursor-pointer">                 
+        <div    className="wallet basis-1/2 flex flex-row p-2 bg-white rounded-md shadow-sm hover:shadow-md cursor-pointer"
+                onClick={props.onClick}>                 
             <div className=" flex items-center justify-center w-8 m-3 ">
                 <img className="w-6" src={walletIcon} alt="wallet-icon" />
             </div>

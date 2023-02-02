@@ -1,4 +1,5 @@
 import React from "react"
+import { currency } from "../../generalComponents/FormComponents"
 
 export function AddWalletForm({wallet, setWallet, errorMsg}){
     function handleChange(event){
@@ -21,11 +22,7 @@ export function AddWalletForm({wallet, setWallet, errorMsg}){
                 <select className=" form-select w-full px-2 py-1 text-gray-800 focus:ring-0 rounded-md border-gray-200 focus:border-gray-400 hover:border-gray-300"
                         placeholder="Type Bottom Text" name="currency" value={wallet.currency} onChange={handleChange} style={errorMsg.styleTextBox(wallet.currency)}>
                     <option value="">-- Choose Currency --</option>
-                    <option value="cny">CN Yuan</option>
-                    <option value="eur">Euro</option>
-                    <option value="tzs">TZ Shillings</option>
-                    <option value="usd">US Dollars</option>
-                    <option value="aed">UAE Dirham</option>
+                    {currency.map((item) => <option key={item.value} value={item.value}>{item.title}</option>)}
                 </select>
                 <p style={errorMsg.styleText}>{!wallet.currency && errorMsg.text}</p>
             </div>
@@ -37,5 +34,4 @@ export function AddWalletForm({wallet, setWallet, errorMsg}){
             </div>                         
         </form>
     )
-
 }

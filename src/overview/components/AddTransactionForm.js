@@ -1,4 +1,5 @@
 import React from "react"
+import { category, currency } from "../../generalComponents/FormComponents"
 
 export function AddTransactionForm({transaction, setTransaction, errorMsg}){
     function handleChange(event){
@@ -13,10 +14,7 @@ export function AddTransactionForm({transaction, setTransaction, errorMsg}){
                 <select className=" form-select w-full p-1 text-gray-800 focus:ring-0 rounded-md border-gray-200 focus:border-gray-400 hover:border-gray-300"
                         name="category" value={transaction.category} onChange={handleChange} style={errorMsg.styleTextBox(transaction.category)}>
                     <option value="">-- Select Category --</option>
-                    <option value="expenditure">Expenditure</option>
-                    <option value="food">Food</option>
-                    <option value="rent">Rent</option>
-                    <option value="transport">Transport</option>
+                    {category.map((item) => <option key={item} value={item}>{item[0].toUpperCase() + item.substring(1).toLowerCase()}</option>)}
                 </select>
                 <p style={errorMsg.styleText}>{!transaction.category && errorMsg.text}</p>
             </div>
@@ -41,11 +39,7 @@ export function AddTransactionForm({transaction, setTransaction, errorMsg}){
                 <select className=" form-select w-full p-1 text-gray-800 focus:ring-0 rounded-md border-gray-200 focus:border-gray-400 hover:border-gray-300"
                         placeholder="Type Bottom Text" name="currency" value={transaction.currency} onChange={handleChange} style={errorMsg.styleTextBox(transaction.currency)}>
                     <option value="">-- Choose Currency --</option>
-                    <option value="cny">CN Yuan</option>
-                    <option value="eur">Euro</option>
-                    <option value="tzs">TZ Shillings</option>
-                    <option value="usd">US Dollars</option>
-                    <option value="aed">UAE Dirham</option>
+                    {currency.map((item) => <option key={item.value} value={item.value}>{item.title}</option>)}
                 </select>
                 <p style={errorMsg.styleText}>{!transaction.currency && errorMsg.text}</p>
             </div>

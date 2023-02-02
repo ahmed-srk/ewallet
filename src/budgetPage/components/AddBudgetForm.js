@@ -1,4 +1,5 @@
 import React from "react";
+import { category, currency } from "../../generalComponents/FormComponents";
 
 export function AddBudgetForm({budget, setBudget, errorMsg}){
     function handleChange(event){
@@ -36,11 +37,7 @@ export function AddBudgetForm({budget, setBudget, errorMsg}){
                 <select className=" form-select w-full px-2 py-1 text-gray-800 focus:ring-0 rounded-md border-gray-200 focus:border-gray-400 hover:border-gray-300"
                         placeholder="Type Bottom Text" name="currency" value={budget.currency} onChange={handleChange} style={errorMsg.styleTextBox(budget.currency)}>
                     <option value="">-- Choose Currency --</option>
-                    <option value="cny">CN Yuan</option>
-                    <option value="eur">Euro</option>
-                    <option value="tzs">TZ Shillings</option>
-                    <option value="usd">US Dollars</option>
-                    <option value="aed">UAE Dirham</option>
+                    {currency.map((item) => <option key={item.value} value={item.value}>{item.title}</option>)}
                 </select>
                 <p style={errorMsg.styleText}>{!budget.currency && errorMsg.text}</p>
             </div>
@@ -51,10 +48,7 @@ export function AddBudgetForm({budget, setBudget, errorMsg}){
                 <select className=" form-select w-full px-1 text-gray-800 focus:ring-0 py-1 rounded-md border-gray-200 focus:border-gray-400 hover:border-gray-300"
                         name="budgetedFor" value={budget.budgetedFor} onChange={handleChange} style={errorMsg.styleTextBox(budget.budgetedFor)}>
                     <option value="">-- All Categories --</option>
-                    <option value="expenditure">Expenditure</option>
-                    <option value="food">Food</option>
-                    <option value="rent">Rent</option>
-                    <option value="transport">Transport</option>
+                    {category.map((item) => <option key={item} value={item}>{item[0].toUpperCase() + item.substring(1).toLowerCase()}</option>)}
                 </select>
                 <p style={errorMsg.styleText}>{!budget.budgetedFor && errorMsg.text}</p>
             </div>

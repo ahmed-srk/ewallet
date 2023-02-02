@@ -24,7 +24,7 @@ function AddWallet(props) {
             }
         }
         
-        props.setWallets(wallet)
+        props.createWallets(wallet)
         props.setShowModal(false)
     }
 

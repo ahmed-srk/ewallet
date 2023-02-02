@@ -1,4 +1,5 @@
 import React from "react"
+import { format }from "date-fns"
 import { nanoid } from "nanoid"
 import CustomModal from "../../generalComponents/CustomModal"
 import { checkErrorForm } from "../../generalComponents/checkErrorForm"
@@ -8,9 +9,9 @@ function Addtransaction(props) {
     const [transaction, setTransaction] = React.useState({
         id: nanoid(),
         category: '',
-        date: '',
+        date: format(new Date(), 'yyyy-MM-dd'),
         amount: '',
-        currency: '',
+        currency: props.currency,
         note: '',
     })
 
@@ -26,7 +27,7 @@ function Addtransaction(props) {
             }
         }
 
-        props.setTransactions(transaction)
+        props.createTransaction(transaction)
         props.setShowModal(false)
     }
 
@@ -35,9 +36,7 @@ function Addtransaction(props) {
             title = {`transaction`}
             setShowModal = {props.setShowModal}
             createContent = {createTransaction}
-            body = { 
-                <AddTransactionForm transaction={transaction} setTransaction={setTransaction} errorMsg={errorMsg} /> 
-            }
+            body = {<AddTransactionForm transaction={transaction} setTransaction={setTransaction} errorMsg={errorMsg} />}
         />
     );
 }
