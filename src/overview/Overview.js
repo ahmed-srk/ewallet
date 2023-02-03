@@ -8,11 +8,12 @@ function Overview(props){
     const [transactions, setTransactions] = React.useState(() => props.getWalletTransactions(props.id))
     const [dateRange, setDateRange] = React.useState(() => setDateFormat('dateRange')[0])
     const [expense, setExpense] = React.useState(0)
+    const [income, setIncome] = React.useState(0)
     const [showModal, setShowModal] = React.useState(false)
 
     function createTransaction(transaction){
         setTransactions((item) => [...item, transaction])
-        setExpense((prev) => prev + Number(transaction.amount))
+        transaction.type === 'expenses' ? setExpense((prev) => prev + Number(transaction.amount)) : setIncome((prev) => prev + Number(transaction.amount))
         props.updateWalletsTransactions(props.id, transaction)
     }
 
@@ -26,7 +27,7 @@ function Overview(props){
         <div>
             <h2 className=" py-4 text-2xl font-bold text-slate-700">
                 {props.name[0].toUpperCase() + props.name.substring(1).toLowerCase()} <span className=" font-light">Overview</span>
-            </h2>            
+            </h2>         
             <div className=" grid grid-cols-4 gap-3 py-1">
                 <button className=" col-span-4 sm:col-span-2 md:col-span-1 p-2 bg-green-500 text-white font-semibold rounded-md shadow-md hover:shadow-lg"
                         onClick={() => setShowModal(true)}>
@@ -40,6 +41,7 @@ function Overview(props){
                 amount={props.amount}
                 dateRange={dateRange}
                 expense={expense}
+                income={income}
             />
             
             { showModal && <AddTransaction currency={props.currency} setShowModal={setShowModal} createTransaction={(transaction) => createTransaction(transaction)} /> }

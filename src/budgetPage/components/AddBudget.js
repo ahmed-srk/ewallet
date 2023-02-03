@@ -1,14 +1,17 @@
 import React from "react"
+import { nanoid } from "nanoid"
 import CustomModal from "../../generalComponents/CustomModal"
 import { AddBudgetForm } from "./AddBudgetForm"
 import { checkErrorForm } from "../../generalComponents/checkErrorForm"
 
 function AddBudget(props) {
     const [budget, setBudget] = React.useState({
+        id: nanoid(),
         name: '',
+        wallet: 'all',
         amount: '',
         currency: '',
-        budgetedFor: '',
+        category: '',
         recurrence: 30,
         startDate: ''
     })

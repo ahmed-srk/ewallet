@@ -4,28 +4,36 @@ import { NoTransaction } from "./NoTransaction";
 import { TransactionTable } from "./TransactionTable";
 
 function Analysis(props){
-    const [expenses, setExpenses] = React.useState(() => updateExpenses())
+    const [expenses, setExpenses] = React.useState(() => setInitialCosts('expenses'))
+    const [income, setIncome] = React.useState(() => setInitialCosts('income'))
     const overview = [
         {title: 'Total Balance', amount: props.amount},
-        {title: 'Total Period Change', amount: -expenses},
+        {title: 'Total Period Change', amount: income - expenses},
         {title: 'Total Period Expenses', amount: -expenses},
-        {title: 'Total Period Income', amount: '0'}
+        {title: 'Total Period Income', amount: income}
     ]
 
-    function updateExpenses(){
+    function setInitialCosts(type){
         let sum = 0
-        props.transactions.forEach((item) => { sum = sum + Number(item.amount) })
+        props.transactions.forEach((item) => {
+            if(item.type === type){ sum = sum + Number(item.amount) }
+        })
         return sum
     }
 
     React.useEffect(() => {
-        setExpenses(() => updateExpenses())
+        setExpenses(() => setInitialCosts('expenses'))
+        setIncome(() => setInitialCosts('income'))
         // eslint-disable-next-line
     }, [props.dateRange])
 
     React.useEffect(() => {
         setExpenses((prev) => prev + props.expense)
     }, [props.expense])
+
+    React.useEffect(() => {
+        setIncome((prev) => prev + props.income)
+    }, [props.income])
 
     return (
         <div className=" flex flex-col space-y-2">

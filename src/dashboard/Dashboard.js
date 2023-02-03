@@ -6,7 +6,7 @@ import Overview from "../overview/Overview";
 function Dashboard() {
     const [showModal, setShowModal] = React.useState(false)
     const [wallets, setWallets] = React.useState(() => JSON.parse(localStorage.getItem('wallets')) || [])
-    const [selectedWallet, setSelectedWallet] = React.useState(() => JSON.parse(localStorage.getItem('selectedWallet')) || wallets[0].id)
+    const [selectedWallet, setSelectedWallet] = React.useState(() => JSON.parse(localStorage.getItem('selectedWallet')))
     const [walletsTransactions, setWalletsTransactions] = React.useState(() => JSON.parse(localStorage.getItem('walletsTransactions')) || [])
 
     function createWallets(wallet){
@@ -32,7 +32,11 @@ function Dashboard() {
     function updateWalletsTransactions(walletId, transaction){
         setWallets((prev) => {
             return prev.map((item) => {
-                return walletId === item.id ? {...item, amount: `${Number(item.amount) - Number(transaction.amount)}`} : {...item}
+                return (
+                    walletId === item.id ? 
+                    {...item, amount: `${Number(item.amount) + Number(transaction.type === 'income' && transaction.amount) - Number(transaction.type === 'expenses' && transaction.amount)}`} : 
+                    {...item}
+                )
             })
         })
 
@@ -55,6 +59,8 @@ function Dashboard() {
         localStorage.setItem('selectedWallet', JSON.stringify(selectedWallet))
     }, [selectedWallet])
 
+    console.log(selectedWallet)
+
     return (
         <div className=" dashboard flex flex-col min-h-screen px-6 sm:px-10 lg:px-16 py-2 pb-4 space-y-1">
             <h2 className=" py-4 text-2xl font-bold text-slate-700">ALL <span className=" font-light">Wallets</span></h2>    
@@ -62,10 +68,10 @@ function Dashboard() {
                 { wallets.map((item) => <WalletCard key = {item.id} {...item} onClick={() => setSelectedWallet(item.id)} />) }
                 <div className=" grid grid-cols-1 gap-2">
                     <button onClick={() => setShowModal(true)} className=" p-2 bg-white font-semibold text-green-500 rounded-md shadow-sm hover:shadow-md">Add New Wallet</button>
-                    <button onClick={() => deleteWallets()} className=" p-2 bg-white font-semibold text-green-500 rounded-md shadow-sm hover:shadow-md">Delete All Wallets</button>
+                    <button disabled={wallets.length === 0 && true} onClick={() => deleteWallets()} className={`p-2 font-semibold text-white rounded-md shadow-sm hover:shadow-md ${wallets.length > 0 ? `bg-red-600` : `bg-gray-500`}`}>Delete All Wallets</button>
                 </div>
             </div>
-            
+  
             { 
                 wallets.map((item) => { 
                     return (

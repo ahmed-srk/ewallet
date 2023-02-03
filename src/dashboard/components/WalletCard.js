@@ -11,7 +11,9 @@ function WalletCard(props) {
             <div>
                 <p className=" text-lg font-semibold text-slate-900">{props.name[0].toUpperCase() + props.name.substring(1).toLowerCase()}</p>
                 <p className=" text-md text-slate-600">Cash</p>
-                <p className=" text-xl font-bold text-green-500">{`${Number(props.amount).toFixed(2)} ${props.currency.toUpperCase()}`}</p>
+                <p  className={` text-2xl font-normal text-green-500 ${props.amount < 0 && `text-red-500`}`}>
+                    {`${Number(props.amount).toFixed(2)} ${props.currency.toUpperCase()}`}
+                </p>
             </div>
         </div>
   );

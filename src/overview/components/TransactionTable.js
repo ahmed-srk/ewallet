@@ -14,7 +14,7 @@ export function TransactionTable(props){
             {
                 props.transactions.map((item) => {
                     return (
-                        <div key={item.id} className=" grid grid-cols-5 justify-items-center p-2 mb-1 text-slate-600 text-md font-medium bg-white shadow-sm rounded-md">
+                        <div key={item.id} className={`grid grid-cols-5 justify-items-center p-2 mb-1 ${item.type === 'expenses' ? `text-red-600` : `text-green-500`} text-md font-medium bg-white shadow-sm rounded-md`}>
                             <p>{item.category[0].toUpperCase() + item.category.substring(1)}</p>
                             <p>{item.amount}</p>
                             <p>{item.currency.toUpperCase()}</p>

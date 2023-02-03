@@ -5,9 +5,10 @@ import CustomModal from "../../generalComponents/CustomModal"
 import { checkErrorForm } from "../../generalComponents/checkErrorForm"
 import { AddTransactionForm } from "./AddTransactionForm"
 
-function Addtransaction(props) {
+function AddTransaction(props) {
     const [transaction, setTransaction] = React.useState({
         id: nanoid(),
+        type: '',
         category: '',
         date: format(new Date(), 'yyyy-MM-dd'),
         amount: '',
@@ -41,4 +42,4 @@ function Addtransaction(props) {
     );
 }
 
-export default Addtransaction;
+export default AddTransaction;
