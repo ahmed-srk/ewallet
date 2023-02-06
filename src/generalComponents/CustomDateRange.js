@@ -4,19 +4,11 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { addDays, differenceInCalendarDays, format } from 'date-fns';
 import { DateRangePicker } from 'react-date-range';
 
-export function setDateFormat(localStorageKey){
-    const range = JSON.parse(localStorage.getItem(localStorageKey))
-    return range && range.map((item) => {
-        return {...item, startDate: new Date(item.startDate), endDate: new Date(item.endDate)}
-    })
-}
-
 export default function CustomDateRange(props) {
     const [dateRange, setDateRange] = React.useState(
-        () => setDateFormat('dateRange') ||
+        props.dateRange || 
         [{ key: 'selection', startDate: addDays(new Date(), -7), endDate: new Date() }]
-    );
-
+    )
     const [showDateRange, setShowDateRange] = React.useState(false)
     const toggleDateRangePicker = () => setShowDateRange((prev) => !prev)
 
@@ -34,8 +26,7 @@ export default function CustomDateRange(props) {
     }
 
     React.useEffect(() => {
-        localStorage.setItem('dateRange', JSON.stringify([{key: 'selection', startDate: dateRange[0].startDate, endDate: dateRange[0].endDate}]))
-        props.changeDateRange(dateRange[0])
+        props.changeDateRange(dateRange)
         // eslint-disable-next-line
     }, [dateRange]);
 
@@ -62,4 +53,11 @@ export default function CustomDateRange(props) {
             </div>
         </div>
     );
+}
+
+export function setDateFormat(localStorageKey){
+    const range = JSON.parse(localStorage.getItem(localStorageKey))
+    return range && range.map((item) => {
+        return {...item, startDate: new Date(item.startDate), endDate: new Date(item.endDate)}
+    })
 }

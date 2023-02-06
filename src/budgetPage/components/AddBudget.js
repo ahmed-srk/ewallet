@@ -12,7 +12,7 @@ function AddBudget(props) {
         amount: '',
         currency: '',
         category: '',
-        recurrence: 30,
+        recurrence: 7,
         startDate: ''
     })
 
@@ -27,7 +27,7 @@ function AddBudget(props) {
             }
         }
         
-        props.setBudgets(budget)
+        props.createBudget(budget)
         props.setShowModal(false)
     }
 
@@ -36,7 +36,7 @@ function AddBudget(props) {
             title = {`budget`}
             setShowModal = {props.setShowModal}
             createContent = {createBudget}
-            body = { <AddBudgetForm budget={budget} setBudget={setBudget} errorMsg={errorMsg}  /> }
+            body = { <AddBudgetForm budget={budget} setBudget={setBudget} errorMsg={errorMsg} /> }
         />   
     );
 }

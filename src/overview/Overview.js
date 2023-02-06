@@ -1,27 +1,39 @@
 import React from "react";
-import { isWithinInterval } from "date-fns";
+import { addDays, isWithinInterval } from "date-fns";
 import CustomDateRange, { setDateFormat } from "../generalComponents/CustomDateRange";
 import AddTransaction from "./components/AddTransaction";
-import Analysis from "./components/Analysis";
+import TransactionsAnalysis from "./components/TransactionsAnalysis";
 
 function Overview(props){
     const [transactions, setTransactions] = React.useState(() => props.getWalletTransactions(props.id))
-    const [dateRange, setDateRange] = React.useState(() => setDateFormat('dateRange')[0])
+    const [dateRange, setDateRange] = React.useState(
+        () => setDateFormat('dateRange') ||
+        [{ key: 'selection', startDate: addDays(new Date(), -7), endDate: new Date() }]
+    )
     const [expense, setExpense] = React.useState(0)
     const [income, setIncome] = React.useState(0)
     const [showModal, setShowModal] = React.useState(false)
 
     function createTransaction(transaction){
         setTransactions((item) => [...item, transaction])
-        transaction.type === 'expenses' ? setExpense((prev) => prev + Number(transaction.amount)) : setIncome((prev) => prev + Number(transaction.amount))
         props.updateWalletsTransactions(props.id, transaction)
+        if(isWithinInterval(new Date(transaction.date), {start: new Date(dateRange[0].startDate), end: new Date(dateRange[0].endDate)})){
+            if(transaction.type === 'expenses'){
+                setExpense((prev) => prev + Number(transaction.amount))
+            }
+            else{
+                setIncome((prev) => prev + Number(transaction.amount))
+            }
+        }
     }
 
-    function changeDateRange(startDate, endDate){
-        setDateRange((prev) => {
-            return {...prev, startDate: startDate, endDate: endDate}
-        })
+    function changeDateRange(range){
+        setDateRange( [{key:'selection', startDate: range[0].startDate, endDate: range[0].endDate}] )
     }
+
+    React.useEffect(() => {
+        localStorage.setItem('dateRange', JSON.stringify(dateRange))
+    }, [dateRange]);
 
     return(
         <div>
@@ -33,10 +45,10 @@ function Overview(props){
                         onClick={() => setShowModal(true)}>
                     Add Transaction
                 </button>
-                <div className=" col-span-4 md:col-start-3 md:col-span-2"><CustomDateRange changeDateRange={({startDate, endDate}) => changeDateRange(startDate, endDate)} /></div>  
+                <div className=" col-span-4 md:col-start-3 md:col-span-2"><CustomDateRange dateRange={dateRange} changeDateRange={(range) => changeDateRange(range)} /></div>  
             </div>
-            <Analysis 
-                transactions={transactions.filter((item) => isWithinInterval(new Date(item.date), {start: dateRange.startDate, end: dateRange.endDate}))} 
+            <TransactionsAnalysis 
+                transactions={transactions.filter((item) => isWithinInterval(new Date(item.date), {start: dateRange[0].startDate, end: addDays(dateRange[0].endDate, 1)}))} 
                 currency={props.currency} 
                 amount={props.amount}
                 dateRange={dateRange}

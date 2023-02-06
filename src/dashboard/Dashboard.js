@@ -3,7 +3,7 @@ import WalletCard from "./components/WalletCard";
 import AddWallet from "./components/AddWallet";
 import Overview from "../overview/Overview";
 
-function Dashboard() {
+function Dashboard({getWalletId}) {
     const [showModal, setShowModal] = React.useState(false)
     const [wallets, setWallets] = React.useState(() => JSON.parse(localStorage.getItem('wallets')) || [])
     const [selectedWallet, setSelectedWallet] = React.useState(() => JSON.parse(localStorage.getItem('selectedWallet')))
@@ -19,6 +19,11 @@ function Dashboard() {
     function deleteWallets(){
         setWallets([])
         setWalletsTransactions([])
+    }
+
+    function getSelectedWallet({id}){
+        setSelectedWallet(id)
+        getWalletId({id})
     }
 
     function getWalletTransactions(walletId){
@@ -59,13 +64,11 @@ function Dashboard() {
         localStorage.setItem('selectedWallet', JSON.stringify(selectedWallet))
     }, [selectedWallet])
 
-    console.log(selectedWallet)
-
     return (
         <div className=" dashboard flex flex-col min-h-screen px-6 sm:px-10 lg:px-16 py-2 pb-4 space-y-1">
             <h2 className=" py-4 text-2xl font-bold text-slate-700">ALL <span className=" font-light">Wallets</span></h2>    
             <div className=" grid md:grid-cols-2 lg:grid-cols-4 gap-3">
-                { wallets.map((item) => <WalletCard key = {item.id} {...item} onClick={() => setSelectedWallet(item.id)} />) }
+                { wallets.map((item) => <WalletCard {...item} onClick={() => getSelectedWallet(item)} />) }
                 <div className=" grid grid-cols-1 gap-2">
                     <button onClick={() => setShowModal(true)} className=" p-2 bg-white font-semibold text-green-500 rounded-md shadow-sm hover:shadow-md">Add New Wallet</button>
                     <button disabled={wallets.length === 0 && true} onClick={() => deleteWallets()} className={`p-2 font-semibold text-white rounded-md shadow-sm hover:shadow-md ${wallets.length > 0 ? `bg-red-600` : `bg-gray-500`}`}>Delete All Wallets</button>

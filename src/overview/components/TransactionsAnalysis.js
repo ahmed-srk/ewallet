@@ -3,7 +3,7 @@ import StatsDetails from "../../generalComponents/StatsDetails"
 import { NoTransaction } from "./NoTransaction";
 import { TransactionTable } from "./TransactionTable";
 
-function Analysis(props){
+function TransactionsAnalysis(props){
     const [expenses, setExpenses] = React.useState(() => setInitialCosts('expenses'))
     const [income, setIncome] = React.useState(() => setInitialCosts('income'))
     const overview = [
@@ -45,4 +45,4 @@ function Analysis(props){
     )
 }
 
-export default Analysis
+export default TransactionsAnalysis
